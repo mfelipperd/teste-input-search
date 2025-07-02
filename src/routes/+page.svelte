@@ -2,18 +2,30 @@
   import './+page.css';
   import { goto } from '$app/navigation';
   import type { PageData } from './$types';
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
   export let data: PageData;
 
     let nameInput:  string = '';
     let debounceTimeout: ReturnType<typeof setTimeout>;
 
+
+      
+  onMount(() => {
+    nameInput = data.name || '';
+
+  });
   
     function onInput(): void {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
       const q = nameInput.trim();
       const currentUrl = new URL(window.location.href);
-    
+       if (q) {
+        currentUrl.searchParams.set('name', q);
+      } else {
+        currentUrl.searchParams.delete('name');
+      }
       const newUrl = currentUrl.pathname + (currentUrl.search ? `?${currentUrl.searchParams.toString()}` : '');
       goto(newUrl, {
         replaceState: true,
@@ -22,6 +34,9 @@
       });
     }, 700);
   }
+
+    $: currentName = $page.url.searchParams.get('name') || '';
+
 </script>
 <main>
      <h1>Descubra a idade pelo nome</h1>

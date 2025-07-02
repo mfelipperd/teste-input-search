@@ -1,0 +1,48 @@
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 2px solid var(--input-border);
+  border-radius: 4px;
+}
+input:focus {
+  outline: none;
+}
+
+.card {
+  width: 100%;
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow);
+  margin-top: 1.5rem;
+  position: relative;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}

@@ -1,4 +1,4 @@
-/** @type {import('./$types').PageLoad} */
+/** @type {import('./index/$types').PageLoad} */
 export async function load({ url, fetch }) {
   const name = url.searchParams.get("name") ?? "";
   if (!name) {
