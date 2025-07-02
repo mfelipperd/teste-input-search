@@ -10,6 +10,9 @@
     let debounceTimeout: ReturnType<typeof setTimeout>;
     let previousName: string = '';
     let previousAge: number | null = null;
+    interface HistoryEntry { name: string; age: number; }
+    let history: HistoryEntry[] = [];
+     let dark: boolean = false;
 
 
       
@@ -17,8 +20,15 @@
     nameInput = data.name || '';
     previousName = data.name || '';
     previousAge = data.age;
-
+     dark = localStorage.getItem('theme') === 'dark';
+    document.documentElement.classList.toggle('dark', dark);
   });
+
+   function toggleTheme(): void {
+    dark = !dark;
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', dark);
+  }
   
     function onInput(): void {
     clearTimeout(debounceTimeout);
@@ -41,14 +51,20 @@
 
     $: currentName = $page.url.searchParams.get('name') || '';
 
-      $: if (
+  $: if (
     currentName &&
     currentName !== previousName &&
     data.age !== null
   ) {
-   
+    if (previousName) {
+      history = [{ name: previousName, age: previousAge as number }, ...history];
+    }
     previousName = currentName;
     previousAge = data.age;
+  }
+
+  function remove(index: number): void {
+    history = history.filter((_, i) => i !== index);
   }
 
 </script>
@@ -72,4 +88,23 @@
       <progress max="100" value={data.age}></progress>
     </div>
   {/if}
+   {#if history.length}
+    <div class="history">
+      {#each history as entry, i}
+        <div class="card history-card">
+          <button class="remove-btn" on:click={() => remove(i)}>×</button>
+          <p>🧙‍♀️ Estimativa para <strong>{entry.name}</strong>: <strong>{entry.age} anos</strong></p>
+          <progress max="100" value={entry.age}></progress>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
+  <button class="theme-toggle" on:click={toggleTheme} aria-label="Toggle theme">
+    {#if dark}
+      🌙
+    {:else}
+      ☀️
+    {/if}
+  </button>
 </main>
