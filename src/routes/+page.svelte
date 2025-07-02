@@ -8,11 +8,15 @@
 
     let nameInput:  string = '';
     let debounceTimeout: ReturnType<typeof setTimeout>;
+    let previousName: string = '';
+    let previousAge: number | null = null;
 
 
       
   onMount(() => {
     nameInput = data.name || '';
+    previousName = data.name || '';
+    previousAge = data.age;
 
   });
   
@@ -36,6 +40,16 @@
   }
 
     $: currentName = $page.url.searchParams.get('name') || '';
+
+      $: if (
+    currentName &&
+    currentName !== previousName &&
+    data.age !== null
+  ) {
+   
+    previousName = currentName;
+    previousAge = data.age;
+  }
 
 </script>
 <main>
